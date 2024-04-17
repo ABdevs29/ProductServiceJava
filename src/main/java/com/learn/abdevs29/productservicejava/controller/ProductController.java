@@ -2,6 +2,7 @@ package com.learn.abdevs29.productservicejava.controller;
 
 import com.learn.abdevs29.productservicejava.dto.CreateProductRequestDTO;
 import com.learn.abdevs29.productservicejava.dto.ProductResponseDTO;
+import com.learn.abdevs29.productservicejava.model.Category;
 import com.learn.abdevs29.productservicejava.model.Product;
 import com.learn.abdevs29.productservicejava.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +48,11 @@ public class ProductController {
     public Product createProduct(@RequestBody CreateProductRequestDTO dto) {
         Product p = productService.createProduct(dto.getTitle(), dto.getDescription(), dto.getImage(), dto.getCategory(), dto.getPrice());
         return p;
+    }
+
+    @GetMapping("/products/categories")
+    public Category[] getAllCategories () {
+        Category[] categories = productService.getAllCategories();
+        return categories;
     }
 }

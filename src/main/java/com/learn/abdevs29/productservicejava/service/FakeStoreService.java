@@ -1,6 +1,7 @@
 package com.learn.abdevs29.productservicejava.service;
 
 import com.learn.abdevs29.productservicejava.dto.FakeStoreProductDTO;
+import com.learn.abdevs29.productservicejava.model.Category;
 import com.learn.abdevs29.productservicejava.model.Product;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
@@ -45,5 +46,24 @@ public class FakeStoreService implements ProductService {
         requestBody.setPrice(price.toString());
         FakeStoreProductDTO response = restTemplate.postForObject("https://fakestoreapi.com/products", requestBody, FakeStoreProductDTO.class);
         return response.toProduct();
+    }
+
+    @Override
+    public Category[] getAllCategories() {
+        ResponseEntity<String[]> response = restTemplate.getForEntity("https://fakestoreapi.com/products/categories", String[].class);
+        String[] categories = response.getBody();
+
+        return convertCategories(categories);
+    }
+
+    public Category[] convertCategories(String [] categories) {
+        Category[] convertedCategories = new Category[categories.length];
+
+        for (int i = 0; i < categories.length; i++) {
+            Category c = new Category();
+            c.setName(categories[i]);
+            convertedCategories[i] = c;
+        }
+        return convertedCategories;
     }
 }
