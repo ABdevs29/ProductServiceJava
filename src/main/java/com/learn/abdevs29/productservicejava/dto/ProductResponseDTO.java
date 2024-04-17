@@ -1,11 +1,12 @@
-package com.learn.abdevs29.productservicejava.model;
+package com.learn.abdevs29.productservicejava.dto;
 
+import com.learn.abdevs29.productservicejava.model.Category;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Product {
+public class ProductResponseDTO {
     private long id;
     private String title;
     private String description;
