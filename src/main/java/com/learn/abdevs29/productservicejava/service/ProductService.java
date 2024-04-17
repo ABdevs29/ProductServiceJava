@@ -10,4 +10,5 @@ public interface ProductService {
     Product[] getAllProducts();
     Product createProduct(String title, String description, String image, String category, Double price);
     Category[] getAllCategories();
+    Product[] getProductsByCategory(String name);
 }

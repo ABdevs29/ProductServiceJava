@@ -55,4 +55,15 @@ public class ProductController {
         Category[] categories = productService.getAllCategories();
         return categories;
     }
+
+    @GetMapping("/products/category/{name}")
+    public ProductResponseDTO[] getProductsByCategory (@PathVariable("name") String name) {
+        Product[] products = productService.getProductsByCategory(name);
+        ProductResponseDTO[] result = new ProductResponseDTO[products.length];
+
+        for(int i = 0; i < products.length; i++) {
+            result[i] = convertProductToDto(products[i]);
+        }
+        return result;
+    }
 }

@@ -66,4 +66,16 @@ public class FakeStoreService implements ProductService {
         }
         return convertedCategories;
     }
+
+    @Override
+    public Product[] getProductsByCategory(String name) {
+        ResponseEntity<FakeStoreProductDTO[]> response = restTemplate.getForEntity("https://fakestoreapi.com/products/category/" + name, FakeStoreProductDTO[].class);
+        FakeStoreProductDTO[] fakeStoreProductDTOS = response.getBody();
+        Product[] products = new Product[fakeStoreProductDTOS.length];
+
+        for (int i = 0; i < fakeStoreProductDTOS.length; i++) {
+            products[i] = fakeStoreProductDTOS[i].toProduct();
+        }
+        return products;
+    }
 }
