@@ -1,12 +1,13 @@
 package com.learn.abdevs29.productservicejava.service;
 
-import com.learn.abdevs29.productservicejava.dto.FakeStoreResponseDTO;
-import com.learn.abdevs29.productservicejava.dto.ProductResponseDTO;
+import com.learn.abdevs29.productservicejava.dto.FakeStoreProductDTO;
 import com.learn.abdevs29.productservicejava.model.Product;
-import org.springframework.context.annotation.Bean;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Service
 public class FakeStoreService implements ProductService {
@@ -18,13 +19,31 @@ public class FakeStoreService implements ProductService {
 
     @Override
     public Product getProductById(Integer id) {
-        ResponseEntity<FakeStoreResponseDTO> response = restTemplate.getForEntity("https://fakestoreapi.com/products/" + id, FakeStoreResponseDTO.class);
-        FakeStoreResponseDTO fakeStoreResponseDTO = response.getBody();
+        ResponseEntity<FakeStoreProductDTO> response = restTemplate.getForEntity("https://fakestoreapi.com/products/" + id, FakeStoreProductDTO.class);
+        FakeStoreProductDTO fakeStoreResponseDTO = response.getBody();
         return fakeStoreResponseDTO.toProduct();
     }
 
     @Override
-    public Product getAllProducts() {
-        return null;
+    public Product[] getAllProducts() {
+        ResponseEntity<FakeStoreProductDTO[]> response = restTemplate.getForEntity("https://fakestoreapi.com/products", FakeStoreProductDTO[].class);
+        FakeStoreProductDTO[] fakeStoreProductDTOS = response.getBody();
+        Product[] arr = new Product[fakeStoreProductDTOS.length];
+        for(int i = 0; i < fakeStoreProductDTOS.length; i++) {
+            arr[i] = fakeStoreProductDTOS[i].toProduct();
+        }
+        return arr;
+    }
+
+    @Override
+    public Product createProduct(String title, String description, String image, String category, Double price) {
+        FakeStoreProductDTO requestBody = new FakeStoreProductDTO();
+        requestBody.setTitle(title);
+        requestBody.setCategory(category);
+        requestBody.setDescription(description);
+        requestBody.setImage(image);
+        requestBody.setPrice(price.toString());
+        FakeStoreProductDTO response = restTemplate.postForObject("https://fakestoreapi.com/products", requestBody, FakeStoreProductDTO.class);
+        return response.toProduct();
     }
 }

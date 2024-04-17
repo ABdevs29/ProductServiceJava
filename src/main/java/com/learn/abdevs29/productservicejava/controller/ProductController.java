@@ -1,12 +1,10 @@
 package com.learn.abdevs29.productservicejava.controller;
 
+import com.learn.abdevs29.productservicejava.dto.CreateProductRequestDTO;
 import com.learn.abdevs29.productservicejava.dto.ProductResponseDTO;
 import com.learn.abdevs29.productservicejava.model.Product;
 import com.learn.abdevs29.productservicejava.service.ProductService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController {
@@ -17,8 +15,13 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String getAllProducts() {
-        return "Get all products";
+    public ProductResponseDTO[] getAllProducts() {
+        Product[] products = productService.getAllProducts();
+        ProductResponseDTO[] productResponseDTOS = new ProductResponseDTO[products.length];
+        for(int i = 0; i < products.length; i++) {
+            productResponseDTOS[i] = convertProductToDto(products[i]);
+        }
+        return productResponseDTOS;
     }
 
     @GetMapping("/products/{id}")
@@ -41,7 +44,8 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public String createProduct() {
-        return "Create a product";
+    public Product createProduct(@RequestBody CreateProductRequestDTO dto) {
+        Product p = productService.createProduct(dto.getTitle(), dto.getDescription(), dto.getImage(), dto.getCategory(), dto.getPrice());
+        return p;
     }
 }
