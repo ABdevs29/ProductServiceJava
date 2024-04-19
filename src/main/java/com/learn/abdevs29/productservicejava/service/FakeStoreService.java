@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FakeStoreService implements ProductService {
@@ -26,12 +29,12 @@ public class FakeStoreService implements ProductService {
     }
 
     @Override
-    public Product[] getAllProducts() {
+    public ArrayList<Product> getAllProducts() {
         ResponseEntity<FakeStoreProductDTO[]> response = restTemplate.getForEntity("https://fakestoreapi.com/products", FakeStoreProductDTO[].class);
         FakeStoreProductDTO[] fakeStoreProductDTOS = response.getBody();
-        Product[] arr = new Product[fakeStoreProductDTOS.length];
-        for(int i = 0; i < fakeStoreProductDTOS.length; i++) {
-            arr[i] = fakeStoreProductDTOS[i].toProduct();
+        ArrayList<Product> arr = new ArrayList<>();
+        for(FakeStoreProductDTO fp : fakeStoreProductDTOS) {
+            arr.add(fp.toProduct());
         }
         return arr;
     }
@@ -49,32 +52,31 @@ public class FakeStoreService implements ProductService {
     }
 
     @Override
-    public Category[] getAllCategories() {
+    public ArrayList<Category> getAllCategories() {
         ResponseEntity<String[]> response = restTemplate.getForEntity("https://fakestoreapi.com/products/categories", String[].class);
         String[] categories = response.getBody();
 
         return convertCategories(categories);
     }
 
-    public Category[] convertCategories(String [] categories) {
-        Category[] convertedCategories = new Category[categories.length];
+    public ArrayList<Category> convertCategories(String [] categories) {
+        ArrayList<Category> convertedCategories = new ArrayList<>();
 
-        for (int i = 0; i < categories.length; i++) {
+        for (String category : categories) {
             Category c = new Category();
-            c.setName(categories[i]);
-            convertedCategories[i] = c;
+            c.setName(category);
+            convertedCategories.add(c);
         }
         return convertedCategories;
     }
 
     @Override
-    public Product[] getProductsByCategory(String name) {
-        ResponseEntity<FakeStoreProductDTO[]> response = restTemplate.getForEntity("https://fakestoreapi.com/products/category/" + name, FakeStoreProductDTO[].class);
-        FakeStoreProductDTO[] fakeStoreProductDTOS = response.getBody();
-        Product[] products = new Product[fakeStoreProductDTOS.length];
+    public ArrayList<Product> getProductsByCategory(String name) {
+        FakeStoreProductDTO[] fakeStoreProductDTOS = restTemplate.getForObject("https://fakestoreapi.com/products/category/" + name, FakeStoreProductDTO[].class);
+        ArrayList<Product> products = new ArrayList<>();
 
-        for (int i = 0; i < fakeStoreProductDTOS.length; i++) {
-            products[i] = fakeStoreProductDTOS[i].toProduct();
+        for (FakeStoreProductDTO fs : fakeStoreProductDTOS) {
+            products.add(fs.toProduct());
         }
         return products;
     }

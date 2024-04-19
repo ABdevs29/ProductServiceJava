@@ -7,6 +7,10 @@ import com.learn.abdevs29.productservicejava.model.Product;
 import com.learn.abdevs29.productservicejava.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class ProductController {
     private ProductService productService;
@@ -16,11 +20,11 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ProductResponseDTO[] getAllProducts() {
-        Product[] products = productService.getAllProducts();
-        ProductResponseDTO[] productResponseDTOS = new ProductResponseDTO[products.length];
-        for(int i = 0; i < products.length; i++) {
-            productResponseDTOS[i] = convertProductToDto(products[i]);
+    public ArrayList<ProductResponseDTO> getAllProducts() {
+        ArrayList<Product> products = productService.getAllProducts();
+        ArrayList<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
+        for(Product p : products) {
+            productResponseDTOS.add(convertProductToDto(p));
         }
         return productResponseDTOS;
     }
@@ -51,18 +55,18 @@ public class ProductController {
     }
 
     @GetMapping("/products/categories")
-    public Category[] getAllCategories () {
-        Category[] categories = productService.getAllCategories();
+    public ArrayList<Category> getAllCategories () {
+        ArrayList<Category> categories = productService.getAllCategories();
         return categories;
     }
 
     @GetMapping("/products/category/{name}")
-    public ProductResponseDTO[] getProductsByCategory (@PathVariable("name") String name) {
-        Product[] products = productService.getProductsByCategory(name);
-        ProductResponseDTO[] result = new ProductResponseDTO[products.length];
+    public ArrayList<ProductResponseDTO> getProductsByCategory (@PathVariable("name") String name) {
+        ArrayList<Product> products = productService.getProductsByCategory(name);
+        ArrayList<ProductResponseDTO> result = new ArrayList<>();
 
-        for(int i = 0; i < products.length; i++) {
-            result[i] = convertProductToDto(products[i]);
+        for(Product product: products) {
+           result.add(convertProductToDto(product));
         }
         return result;
     }
