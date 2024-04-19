@@ -71,8 +71,8 @@ public class FakeStoreService implements ProductService {
     }
 
     @Override
-    public ArrayList<Product> getProductsByCategory(String name) {
-        FakeStoreProductDTO[] fakeStoreProductDTOS = restTemplate.getForObject("https://fakestoreapi.com/products/category/" + name, FakeStoreProductDTO[].class);
+    public ArrayList<Product> getProductsByCategory(String name, Map<String, String> map) {
+        FakeStoreProductDTO[] fakeStoreProductDTOS = restTemplate.getForObject("https://fakestoreapi.com/products/category/{name}?limit={limit}&sort={sort}", FakeStoreProductDTO[].class, map);
         ArrayList<Product> products = new ArrayList<>();
 
         for (FakeStoreProductDTO fs : fakeStoreProductDTOS) {

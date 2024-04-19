@@ -12,5 +12,5 @@ public interface ProductService {
     ArrayList<Product> getAllProducts();
     Product createProduct(String title, String description, String image, String category, Double price);
     ArrayList<Category> getAllCategories();
-    ArrayList<Product> getProductsByCategory(String name);
+    ArrayList<Product> getProductsByCategory(String name, Map<String, String> map);
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class ProductController {
@@ -61,8 +62,12 @@ public class ProductController {
     }
 
     @GetMapping("/products/category/{name}")
-    public ArrayList<ProductResponseDTO> getProductsByCategory (@PathVariable("name") String name) {
-        ArrayList<Product> products = productService.getProductsByCategory(name);
+    public ArrayList<ProductResponseDTO> getProductsByCategory (@PathVariable("name") String name, @RequestParam(required = false) String limit, @RequestParam(required = false) String sort) {
+        Map<String, String> map = new HashMap<>();
+        map.put("name", name);
+        map.put("limit", limit);
+        map.put("sort", sort);
+        ArrayList<Product> products = productService.getProductsByCategory(name, map);
         ArrayList<ProductResponseDTO> result = new ArrayList<>();
 
         for(Product product: products) {
