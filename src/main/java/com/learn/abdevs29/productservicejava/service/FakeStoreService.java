@@ -4,6 +4,8 @@ import com.learn.abdevs29.productservicejava.dto.FakeStoreProductDTO;
 import com.learn.abdevs29.productservicejava.model.Category;
 import com.learn.abdevs29.productservicejava.model.Product;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,8 +26,13 @@ public class FakeStoreService implements ProductService {
     @Override
     public Product getProductById(Integer id) {
         ResponseEntity<FakeStoreProductDTO> response = restTemplate.getForEntity("https://fakestoreapi.com/products/" + id, FakeStoreProductDTO.class);
-        FakeStoreProductDTO fakeStoreResponseDTO = response.getBody();
-        return fakeStoreResponseDTO.toProduct();
+        System.out.println(response.getStatusCode());
+        if(response.getBody() == null) {
+            return null;
+        } else {
+            FakeStoreProductDTO fakeStoreResponseDTO = response.getBody();
+            return fakeStoreResponseDTO.toProduct();
+        }
     }
 
     @Override

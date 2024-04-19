@@ -2,6 +2,7 @@ package com.learn.abdevs29.productservicejava.controller;
 
 import com.learn.abdevs29.productservicejava.dto.CreateProductRequestDTO;
 import com.learn.abdevs29.productservicejava.dto.ProductResponseDTO;
+import com.learn.abdevs29.productservicejava.exception.ProductNotFoundException;
 import com.learn.abdevs29.productservicejava.model.Category;
 import com.learn.abdevs29.productservicejava.model.Product;
 import com.learn.abdevs29.productservicejava.service.ProductService;
@@ -31,8 +32,11 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public ProductResponseDTO getProductById(@PathVariable("id") Integer id) {
+    public ProductResponseDTO getProductById(@PathVariable("id") Integer id) throws ProductNotFoundException {
         Product product = productService.getProductById(id);
+        if(product == null) {
+            throw new ProductNotFoundException("Product not found. Try again!");
+        }
         //conversion from product to DTO
         return convertProductToDto(product);
     }
