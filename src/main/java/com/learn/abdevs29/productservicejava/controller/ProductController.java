@@ -59,6 +59,18 @@ public class ProductController {
         return p;
     }
 
+    @PutMapping("/products/{id}")
+    public Product updateProduct(@RequestBody CreateProductRequestDTO dto, @PathVariable("id") Integer id) {
+        Product p = productService.updateProduct(id, dto.getTitle(), dto.getDescription(), dto.getImage(), dto.getCategory(), dto.getPrice());
+        return p;
+    }
+
+    @DeleteMapping("/products/{id}")
+    public Product deleteProduct(@PathVariable("id") Integer id) {
+        Product p = productService.deleteProduct(id);
+        return p;
+    }
+
     @GetMapping("/products/categories")
     public ArrayList<Category> getAllCategories () {
         ArrayList<Category> categories = productService.getAllCategories();

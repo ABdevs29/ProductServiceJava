@@ -4,9 +4,7 @@ import com.learn.abdevs29.productservicejava.dto.FakeStoreProductDTO;
 import com.learn.abdevs29.productservicejava.model.Category;
 import com.learn.abdevs29.productservicejava.model.Product;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -56,6 +54,26 @@ public class FakeStoreService implements ProductService {
         requestBody.setPrice(price.toString());
         FakeStoreProductDTO response = restTemplate.postForObject("https://fakestoreapi.com/products", requestBody, FakeStoreProductDTO.class);
         return response.toProduct();
+    }
+
+    @Override
+    public Product updateProduct(Integer id, String title, String description, String image, String category, Double price) {
+        FakeStoreProductDTO requestBody = new FakeStoreProductDTO();
+        requestBody.setId(id);
+        requestBody.setTitle(title);
+        requestBody.setCategory(category);
+        requestBody.setDescription(description);
+        requestBody.setImage(image);
+        requestBody.setPrice(price.toString());
+
+        ResponseEntity<FakeStoreProductDTO> response = restTemplate.exchange("https://fakestoreapi.com/products/" + id, HttpMethod.PUT ,new HttpEntity<>(requestBody), FakeStoreProductDTO.class);
+        return response.getBody().toProduct();
+    }
+
+    @Override
+    public Product deleteProduct(Integer id) {
+        ResponseEntity<FakeStoreProductDTO> response = restTemplate.exchange("https://fakestoreapi.com/products/" + id, HttpMethod.DELETE, null , FakeStoreProductDTO.class);
+        return response.getBody().toProduct();
     }
 
     @Override

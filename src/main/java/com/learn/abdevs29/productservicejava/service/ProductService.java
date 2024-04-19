@@ -11,6 +11,8 @@ public interface ProductService {
     Product getProductById (Integer id);
     ArrayList<Product> getAllProducts();
     Product createProduct(String title, String description, String image, String category, Double price);
+    Product updateProduct(Integer id, String title, String description, String image, String category, Double price);
+    Product deleteProduct(Integer id);
     ArrayList<Category> getAllCategories();
     ArrayList<Product> getProductsByCategory(String name, Map<String, String> map);
 }
