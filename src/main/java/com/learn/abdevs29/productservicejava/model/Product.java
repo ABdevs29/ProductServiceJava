@@ -1,15 +1,20 @@
 package com.learn.abdevs29.productservicejava.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-public class Product {
-    private long id;
+
+@Data
+@NoArgsConstructor
+@Entity
+public class Product extends BaseModal {
     private String title;
     private String description;
     private String price;
     private String image_url;
+
+    @ManyToOne
     private Category category;
 }

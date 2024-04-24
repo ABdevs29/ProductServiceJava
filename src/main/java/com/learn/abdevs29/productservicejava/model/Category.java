@@ -1,11 +1,16 @@
 package com.learn.abdevs29.productservicejava.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-public class Category {
-    private long id;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@Entity
+public class Category extends BaseModal {
     private String name;
+
 }
