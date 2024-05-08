@@ -1,5 +1,6 @@
 package com.learn.abdevs29.productservicejava.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -15,6 +16,6 @@ public class Product extends BaseModal {
     private String price;
     private String image_url;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE})
     private Category category;
 }
