@@ -2,28 +2,27 @@ package com.learn.abdevs29.productservicejava.controller;
 
 import com.learn.abdevs29.productservicejava.dto.CreateProductRequestDTO;
 import com.learn.abdevs29.productservicejava.dto.ProductResponseDTO;
+import com.learn.abdevs29.productservicejava.exception.CategoryNotFoundException;
 import com.learn.abdevs29.productservicejava.exception.ProductNotFoundException;
 import com.learn.abdevs29.productservicejava.model.Category;
 import com.learn.abdevs29.productservicejava.model.Product;
 import com.learn.abdevs29.productservicejava.service.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class ProductController {
     private ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.productService = productService;
     }
 
     @GetMapping("/products")
     public ArrayList<ProductResponseDTO> getAllProducts() {
-        ArrayList<Product> products = productService.getAllProducts();
+        List<Product> products = productService.getAllProducts();
         ArrayList<ProductResponseDTO> productResponseDTOS = new ArrayList<>();
         for(Product p : products) {
             productResponseDTOS.add(convertProductToDto(p));
@@ -54,13 +53,13 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public Product createProduct(@RequestBody CreateProductRequestDTO dto) {
+    public Product createProduct(@RequestBody CreateProductRequestDTO dto) throws CategoryNotFoundException {
         Product p = productService.createProduct(dto.getTitle(), dto.getDescription(), dto.getImage(), dto.getCategory(), dto.getPrice());
         return p;
     }
 
     @PutMapping("/products/{id}")
-    public Product updateProduct(@RequestBody CreateProductRequestDTO dto, @PathVariable("id") Integer id) {
+    public Product updateProduct(@RequestBody CreateProductRequestDTO dto, @PathVariable("id") Integer id) throws CategoryNotFoundException {
         Product p = productService.updateProduct(id, dto.getTitle(), dto.getDescription(), dto.getImage(), dto.getCategory(), dto.getPrice());
         return p;
     }
@@ -72,8 +71,8 @@ public class ProductController {
     }
 
     @GetMapping("/products/categories")
-    public ArrayList<Category> getAllCategories () {
-        ArrayList<Category> categories = productService.getAllCategories();
+    public List<Category> getAllCategories () {
+        List<Category> categories = productService.getAllCategories();
         return categories;
     }
 
@@ -83,7 +82,7 @@ public class ProductController {
         map.put("name", name);
         map.put("limit", limit);
         map.put("sort", sort);
-        ArrayList<Product> products = productService.getProductsByCategory(name, map);
+        List<Product> products = productService.getProductsByCategory(name, map);
         ArrayList<ProductResponseDTO> result = new ArrayList<>();
 
         for(Product product: products) {

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Service("fakeStoreService")
 public class FakeStoreService implements ProductService {
     private RestTemplate restTemplate;
 
