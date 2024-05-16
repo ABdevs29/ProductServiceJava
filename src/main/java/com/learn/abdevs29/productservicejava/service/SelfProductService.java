@@ -5,6 +5,9 @@ import com.learn.abdevs29.productservicejava.model.Category;
 import com.learn.abdevs29.productservicejava.model.Product;
 import com.learn.abdevs29.productservicejava.repository.CategoryRepository;
 import com.learn.abdevs29.productservicejava.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -92,6 +95,13 @@ public class SelfProductService implements ProductService{
         }
 
         return productRepository.findProductByCategory(fetchedCategory);
+    }
+
+    @Override
+    public List<Product> getPaginatedProducts(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Product> products = productRepository.findAll(pageable);
+        return products.toList();
     }
 
 }

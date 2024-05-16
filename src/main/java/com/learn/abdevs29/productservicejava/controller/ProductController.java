@@ -8,6 +8,7 @@ import com.learn.abdevs29.productservicejava.model.Category;
 import com.learn.abdevs29.productservicejava.model.Product;
 import com.learn.abdevs29.productservicejava.service.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -89,5 +90,11 @@ public class ProductController {
            result.add(convertProductToDto(product));
         }
         return result;
+    }
+
+    @GetMapping("/products/{pageSize}/{pageNo}")
+    public ResponseEntity<List<Product>> getPaginatedProducts(@PathVariable("pageSize") Integer pageSize, @PathVariable("pageNo") Integer pageNo) {
+        List<Product> products = productService.getPaginatedProducts(pageNo, pageSize);
+        return ResponseEntity.ok(products);
     }
 }

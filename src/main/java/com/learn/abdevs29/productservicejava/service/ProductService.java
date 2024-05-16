@@ -16,4 +16,5 @@ public interface ProductService {
     Product deleteProduct(Integer id);
     List<Category> getAllCategories();
     List<Product> getProductsByCategory(String name, Map<String, String> map);
+    List<Product> getPaginatedProducts(Integer pageNo, Integer pageSize);
 }
